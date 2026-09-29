@@ -1,0 +1,17 @@
+body {
+    background-color: rgb(182, 226, 247);
+    color: black;
+    font-size: 1.15em;
+}
+
+nav {
+    font-size: 1.2em;
+}
+
+.navbar-brand {
+    font-size: 1.1em;
+}
+
+.card{
+    border: black, 3px, solid;
+}
