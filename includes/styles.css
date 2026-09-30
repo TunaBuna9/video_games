@@ -2,6 +2,7 @@ body {
     background-color: rgb(182, 226, 247);
     color: black;
     font-size: 1.15em;
+    padding: auto;
 }
 
 nav {
@@ -14,4 +15,39 @@ nav {
 
 .card{
     border: black, 3px, solid;
+}
+
+.container-custom{
+    width: 80%;
+    margin: auto;
+}
+
+table{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+
+table, td, th, tr{
+    border: 2px solid black;
+    
+}
+
+th, tr{
+    padding: 1%;
+    min-width: 2%;
+}
+
+.pre-img img{
+    height: 10vw;
+    width: 10vw;
+     object-fit: cover;
+}
+
+
+@media only screen and (min-width: 992px) {
+    .container-custom{
+    width: 70%;
+}
+
 }

@@ -5,8 +5,12 @@ $console = '';
 $price = '';
 $isValidCode = '';
 $isValidPrice = '';
+$game_image = '';
+$filename = '';
 
 $errors = [];
+$game_list = [];
+
 
 // Consoles
 $consolesList = [
@@ -23,6 +27,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $game_name = trim(filter_input(INPUT_POST, 'game_name') ?? '');
   $console = trim(filter_input(INPUT_POST, 'console') ?? '');
   $price = trim(filter_input(INPUT_POST, 'price') ?? '');
+
+  // Image upload and transfering
+  $uploadedFile  = $_FILES['game_image'];
+  $filename = basename($uploadedFile['name']);
+
+  // Adds uni code to the first half, so duplicate images can exist
+
+  if ($filename != '') {
+    $filename = time() . $filename;
+  }
+
+
+  echo ($filename);
+  $destination = __DIR__ . '/uploads/' . $filename;
+  move_uploaded_file(
+    $uploadedFile['tmp_name'],
+    $destination
+  );
 
   // __Error messaging__
   // Invetory Code + match
@@ -60,6 +82,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($isValidPrice === 0) {
     $errors['price'] = 'Please use the format: 20.00';
   };
+
+  // No Image error
+  if (!$filename) {
+    $errors['game_image'] = 'Please select a preview image.';
+  };
+
+  if (!$errors) {
+    $new = [
+      $inven_code,
+      $game_name,
+      $console,
+      $price,
+      $filename
+    ];
+
+    $game_list = [$new];
+
+    $database = "games/games.csv";
+
+    $file = fopen($database, 'a');
+    if ($file === false) {
+      die("Error opening the file" . $filename);
+    }
+
+    foreach ($game_list as $row) {
+      fputcsv($file, $row);
+    }
+
+    fclose($file);
+  }
 };
 
 ?>
@@ -86,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-sm-12 col-md-6 my-3">
           <div class="card h-100">
             <h5 class="card-header">About Us</h5>
-            <img src="..." class="card-img-top" alt="...">
+            <img src="images/pixelartStars.jpg" class="card-img-top" height = "50%" alt="Blue and Purple pixel art of the glaxay.">
 
             <div class="card-body">
 
@@ -110,9 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container text-center">
       <div class="col-sm-12 text-start">
-        <div class="card">
+        <div class="card mb-5 ">
           <h2 class="card-header text-center p-4">Share Your Game Today!</h2>
-          <form method="post" action="index.php" novalidate>
+          <form method="post" action="index.php" enctype="multipart/form-data" novalidate >
             <div class="card-body">
               <p class="card-text">
               <p class="text-center">Fill out the form below to add your game to our severs!</p>
@@ -142,9 +194,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 placeholder="Rage Racers"
                 value="<?= htmlspecialchars($game_name); ?>">
 
-                 <?php if (isset($errors['game_name'])): ?>
-                    <div class="invalid-feedback"><?= htmlspecialchars($errors['game_name']) ?></div>
-                <?php endif; ?>
+              <?php if (isset($errors['game_name'])): ?>
+                <div class="invalid-feedback"><?= htmlspecialchars($errors['game_name']) ?></div>
+              <?php endif; ?>
               <br>
 
               <!-- Console Drop down -->
@@ -175,31 +227,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
               </select>
 
-               <?php if (isset($errors['console'])): ?>
-                    <div class="invalid-feedback"><?= htmlspecialchars($errors['console']) ?></div>
-                <?php endif; ?>
+              <?php if (isset($errors['console'])): ?>
+                <div class="invalid-feedback"><?= htmlspecialchars($errors['console']) ?></div>
+              <?php endif; ?>
               <br>
 
               <!-- Price -->
               <label class="formLabel" for="price"> Price (USD): </label>
               <input
-                class="form-control  <?= isset($errors['price']) ? 'is-invalid' : '' ?>"
+                class="form-control <?= isset($errors['price']) ? 'is-invalid' : '' ?>"
                 type="text"
                 id="price"
                 name="price"
                 placeholder="$25.00"
                 value="<?= htmlspecialchars($price); ?>">
 
-                 <?php if (isset($errors['price'])): ?>
-                    <div class="invalid-feedback"><?= htmlspecialchars($errors['price']) ?></div>
-                <?php endif; ?>
+              <?php if (isset($errors['price'])): ?>
+                <div class="invalid-feedback"><?= htmlspecialchars($errors['price']) ?></div>
+              <?php endif; ?>
               <br>
 
               <!-- Game image -->
-              <p>Image upload place holdder</p>
-              </p>
+              <label for="game_image">Upload an image preview of your game: </label>
+              <input class="form-control <?= isset($errors['game_image']) ? 'is-invalid' : '' ?>" type="file" name="game_image" id="game_image">
 
             </div>
+
+            <?php if ($filename): ?>
+              <img
+                src="uploads/<?= htmlspecialchars($filename) ?>"
+                alt="Uploaded image"
+                width="200">
+
+              <p>Your image has been uploaded</p>
+            <?php else: ?>
+              <p>No image has been uploaded.</p>
+            <?php endif; ?>
+
 
             <div class="card-footer text-center">
               <button class="btn btn-primary btn-lg" type="submit">
