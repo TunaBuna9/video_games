@@ -29,18 +29,21 @@ fclose($file);
 
 <body>
     <?php include 'includes/navigation.php' ?>
-    <h1>Availiable games</h1>
+    <h1 class="title mt-4">Available games</h1>
 
     <div class="container-custom text-center mb-5 ">
         <div class="row width-100">
             <div class="col my-3">
                 <div class="card">
-                    <h5 class="card-header">Rcently Added Games</h5>
+                    <h5 class="card-header p-3">Check out our recently added games below!</h5>
 
                     <div class="card-body">
 
                         <p class="card-text">
-
+                            <?php
+                            if (!$list2) { ?>
+                        <p>Looks like we have nothing new to show you.<br>Check back in later or upload your own game to get it highlighted here!</p>
+                    <?php } else { ?>
                         <table>
                             <tr>
                                 <th>Game ID</th>
@@ -56,7 +59,7 @@ fclose($file);
 
                                     <td> <?php echo (htmlspecialchars("$item[1]")); ?> </td>
 
-                                    <td> <?php echo (htmlspecialchars("$item[2]")); ?> </td>
+                                    <td> <?php echo ucfirst(htmlspecialchars("$item[2]")); ?> </td>
 
                                     <td> <?php echo (htmlspecialchars("$" . "$item[3]")); ?> </td>
 
@@ -73,10 +76,16 @@ fclose($file);
                             <?php } ?>
 
                         </table>
-                        
+
                         </p>
                         <p class="text-secondary">Click photos to see full details</p>
                     </div>
+
+                <?php } ?>
+
+
+
+
                 </div>
             </div>
 </body>

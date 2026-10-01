@@ -7,6 +7,9 @@ $isValidCode = '';
 $isValidPrice = '';
 $game_image = '';
 $filename = '';
+$success = false;
+
+$message ='';
 
 $errors = [];
 $game_list = [];
@@ -18,7 +21,7 @@ $consolesList = [
   'playstation4',
   'xbox360',
   'wii',
-  '3ds',
+  '3DS',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,8 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filename = time() . $filename;
   }
 
-
-  echo ($filename);
   $destination = __DIR__ . '/uploads/' . $filename;
   move_uploaded_file(
     $uploadedFile['tmp_name'],
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (!$price) {
     $errors['price'] = 'Please enter a price.';
   } elseif ($price <= 0) {
-    $errors['price'] = 'Price must be greater than zero';
+    $errors['price'] = 'Price must be greater than zero and not include a dollar Sign';
   } else {
     $pricePattern = "/\d{1}.\d{2,2}$/";
     $isValidPrice = preg_match($pricePattern, $price);
@@ -111,6 +112,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     fclose($file);
+
+    $success = true;
+  }
+
+  if ($success == true){
+    $inven_code = '';
+    $game_name = '';
+    $console = '';
+    $price = '';
+    $game_image = '';
+    $filename='';
+    
+    $message = '<br><br><b>Your information has been submitted! Thank you!</b>';
+
   }
 };
 
@@ -131,28 +146,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php include 'includes/navigation.php' ?>
 
   <div class="container-fluid my-1 text-center">
-    <h1 class="mt-4">Find your next game today! The sky's the limit</h1>
+    <h1 class="mt-4 title">Find your next game today!<br>The sky's the limit</h1>
 
-    <div class="container text-center mb-5">
+    <div class="container-custom text-center mb-5">
       <div class="row">
         <div class="col-sm-12 col-md-6 my-3">
-          <div class="card h-100">
+          <div class="card twosided-card h-100 ">
             <h5 class="card-header">About Us</h5>
-            <img src="images/pixelartStars.jpg" class="card-img-top" height = "50%" alt="Blue and Purple pixel art of the glaxay.">
-
-            <div class="card-body">
-
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+            <img src="images/pixelartStars.jpg" class="card-img-top px-3 pt-3" alt="Blue and Purple pixel art of the glaxay.">
+            <div class="card-body h-100">
+              <p class="card-text">Everyone enjoys playing video games, but sometimes you want to mix the a adventure with the past. That's why Starry Sky's Games works hard to offer a wide variety of ported games featuring the consoles you grew up loving most!</p>
             </div>
           </div>
         </div>
 
         <div class="col-sm-12 col-md-6 my-3">
-          <div class="card h-100">
-            <h5 class="card-header">Featured</h5>
-            <img src="..." class="card-img-top" alt="...">
+          <div class="card twosided-card h-100">
+            <h5 class="card-header">Our Motto</h5>
+            <img src="images/moon.jpg" class="card-img-top  px-3 pt-3" alt="Pixel art of a moon in the sky with faint clouds in front of it.">
             <div class="card-body">
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+              <p class="card-text">No matter what world you end up exploring, ultimately, we're all under the same stars. That's why us at Starry Sky's Games aim to treat all users as family and offer all the support we can, because otherwise it's just us and the stars, and that's a little loney?</p>
             </div>
           </div>
 
@@ -160,14 +173,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <div class="container text-center">
+    <div class="container-custom text-center">
       <div class="col-sm-12 text-start">
         <div class="card mb-5 ">
           <h2 class="card-header text-center p-4">Share Your Game Today!</h2>
-          <form method="post" action="index.php" enctype="multipart/form-data" novalidate >
+          <form method="post" action="index.php" enctype="multipart/form-data" novalidate>
             <div class="card-body">
               <p class="card-text">
-              <p class="text-center">Fill out the form below to add your game to our severs!</p>
+              <p class="text-center">If you are a devleoper and have a game you want to share with us,<br>fill out the form below to add it to our severs!
+                <?php echo($message); ?>
+              </p>
 
               <!-- ID Code -->
               <label class="formLabel" for="inven_code"> Inventory Code: </label>
@@ -221,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   Wii
                 </option>
 
-                <option value="3ds" <?= $console === '3ds' ? 'selected' : '' ?>>
+                <option value="3DS" <?= $console === '3DS' ? 'selected' : '' ?>>
                   3DS
                 </option>
 
@@ -259,9 +274,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 alt="Uploaded image"
                 width="200">
 
-              <p>Your image has been uploaded</p>
+              <p class="ms-3">Your image has been uploaded.</p>
             <?php else: ?>
-              <p>No image has been uploaded.</p>
+              <p class="ms-3">Please reupload your image.</p>
             <?php endif; ?>
 
 
