@@ -269,14 +269,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <?php if ($filename): ?>
-              <img
-                src="uploads/<?= htmlspecialchars($filename) ?>"
-                alt="Uploaded image"
-                width="200">
-
-              <p class="ms-3">Your image has been uploaded.</p>
+              <p class="ms-3">Please reupload your image</p>
             <?php else: ?>
-              <p class="ms-3">Please reupload your image.</p>
+              <p class="ms-3">Please upload your image.</p>
             <?php endif; ?>
 
 
