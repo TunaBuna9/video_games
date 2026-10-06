@@ -9,7 +9,7 @@ $game_image = '';
 $filename = '';
 $success = false;
 
-$message ='';
+$message = '';
 
 $errors = [];
 $game_list = [];
@@ -42,6 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   $destination = __DIR__ . '/uploads/' . $filename;
+
+  // Makes Directory, if Github deleted empty file again  
+  if (!file_exists('uploads')) {
+    mkdir('uploads');
+  }
+
   move_uploaded_file(
     $uploadedFile['tmp_name'],
     $destination
@@ -116,16 +122,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $success = true;
   }
 
-  if ($success == true){
+  if ($success == true) {
     $inven_code = '';
     $game_name = '';
     $console = '';
     $price = '';
     $game_image = '';
-    $filename='';
-    
-    $message = '<br><br><b>Your information has been submitted! Thank you!</b>';
+    $filename = '';
 
+    $message = '<br><br><b>Your information has been submitted! Thank you!</b>';
   }
 };
 
@@ -181,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card-body">
               <p class="card-text">
               <p class="text-center">If you are a devleoper and have a game you want to share with us,<br>fill out the form below to add it to our severs!
-                <?php echo($message); ?>
+                <?php echo ($message); ?>
               </p>
 
               <!-- ID Code -->
