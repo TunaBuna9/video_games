@@ -1,6 +1,6 @@
 <?php
 
-$file = fopen("games/games.csv", 'r');
+$file = fopen("games/games.csv", 'r+');
 $list = array();
 $list2 = [];
 

@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $database = "games/games.csv";
 
-    $file = fopen($database, 'a');
+    $file = fopen($database, 'a+');
     if ($file === false) {
       die("Error opening the file" . $filename);
     }
